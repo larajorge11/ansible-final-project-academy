@@ -29,7 +29,7 @@
     - name: "Create a network interface {{ network_interface_name }}"
       shell: "az network nic create -g {{ resource_group_name }} --vnet-name {{ virtual_network_name }} --subnet {{ subnet_name }} \
       -n {{ network_interface_name }} --network-security-group {{ network_security_group_name }} \
-      --public-ip-address {{ public_ip_name }}"
+      --public-ip-address {{ public_ip_name }} --accelerated-networking true"
       when: network_interface_name is defined
     
     - name: "Create a storage account {{ storage_account_name }}"
