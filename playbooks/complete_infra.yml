@@ -1,0 +1,11 @@
+-   hosts: localhost
+    gather_facts: false
+
+    vars:
+        az_pwd: __azPass__
+        az_user: __azUser__
+
+    tasks:
+        -   name: Login to Azure
+            shell: "az login -u {{ az_user }} -p {{ az_pwd }}"
+  
