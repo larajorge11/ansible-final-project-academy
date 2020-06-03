@@ -1,0 +1,33 @@
+---
+- include_role:
+    name: create-resources
+
+- name: "Create {{availabilityset_name}} Availability Set"
+  azure_rm_availabilityset:
+    name: "{{availabilityset_name}}"
+    location: "{{location}}"
+    resource_group: "{{resource_group_name}}"
+    sku: Aligned
+
+- name: "Create VM {{ vm_name }}"
+  azure_rm_virtualmachine:
+    auth_source: cli
+    virtual_network: "{{ virtual_network_name }}"
+    subnet_name: "{{ subnet_name }}"
+    network_interfaces: "{{ subnet_name }}"
+    storage_account: "{{ subnet_name }}"
+    storage_blob: "{{ subnet_name }}"
+    storage_container: "{{ container_name }}"
+    resource_group: "{{ resource_group_name }}"
+    availability_set: "{{ availability_set_name }}"
+    name: "{{ vm_name }}"
+    admin_username: "{{ vm_user }}"
+    admin_password: "{{ pwd }}"
+    managed_disk_type: "{{ managed_disk_type }}"
+    vm_size: "{{ vm_size }}"
+    boot_diagnostics: no
+    image:
+    offer: UbuntuServer
+    publisher: Canonical
+    sku: "{{ sku }}"
+    version: latest
