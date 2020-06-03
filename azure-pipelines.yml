@@ -43,7 +43,7 @@ stages:
           pool:
             vmImage: $(vmImageNameWindows)
           steps:
-            - task: AzureFileCopy@4
+            - task: AzureFileCopy@3
               displayName: 'Copy code to Blob'
               inputs:
                 SourcePath: '$(System.DefaultWorkingDirectory)/crud-app/crud.zip'
@@ -51,7 +51,7 @@ stages:
                 Destination: 'AzureBlob'
                 storage: '$(storageAccountName)'
                 ContainerName: '$(containerName)'
-            - task: AzureFileCopy@4
+            - task: AzureFileCopy@3
               displayName: 'Copy script to Blob'
               inputs:
                 SourcePath: '$(System.DefaultWorkingDirectory)/crud-app/script.sh'
