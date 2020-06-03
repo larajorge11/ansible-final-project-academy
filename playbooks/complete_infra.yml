@@ -1,11 +1,31 @@
--   hosts: localhost
-    gather_facts: false
-
-    vars:
-        az_pwd: __azPass__
-        az_user: __azUser__
-
-    tasks:
-        -   name: Login to Azure
-            shell: "az login -u {{ az_user }} -p {{ az_pwd }}"
+- hosts: localhost
+  gather_facts: false
   
+  vars:
+    vm_name: __vmName__
+    vm_pwd: __vmPass__
+    vm_user: __vmUser__
+    # vm_size: __vmSize__
+    az_user: __azUser__
+    az_pwd: __azPass__
+    location: __location__
+    resource_group_name: __resourceGroupName__
+
+  tasks:
+    - name: debug vmname
+      debug:
+        msg: "new vm is {{ vm_name }}"
+    
+    - name: login to azure
+      shell: "az login -u {{ az_user }} -p {{ az_pwd }}"
+
+    - name: "Create resource group"
+      shell: "az group create --location {{ location }} --name {{ resource_group_name }}"
+
+    - name: "Create VM {{ vm_name }} with defaults"
+      shell: "az vm create \
+        --resource-group {{ resource_group_name }} \
+        --name {{ vm_name }} \
+        --image UbuntuLTS \
+        --admin-username {{ vm_user }} \
+        --admin-password {{ vm_pwd }}"
