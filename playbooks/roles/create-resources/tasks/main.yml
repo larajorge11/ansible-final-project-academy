@@ -1,0 +1,42 @@
+---
+    - name: "Create resource group"
+      shell: "az group create --location {{ location }} --name {{ resource_group_name }}"
+      when: resource_group_name is defined
+    
+    - name: "Create {{ virtual_network_name }} Virtual Network and Subnet {{ subnet_name }}"
+      shell: "az network vnet create -g {{ resource_group_name }} -n {{ virtual_network_name }} --address-prefix {{ virtual_network_cidr }} \
+        --subnet-name {{ subnet_name }} --subnet-prefix {{ subnet_cidr }}"
+      when: virtual_network_name is defined
+    
+    - name: "Create IP Address {{ public_ip_name }}"
+      shell: "az network public-ip create -g {{ resource_group_name }} -n {{ public_ip_name }} \
+      --allocation-method Static --dns-name {{ dns_label }}"
+      when: 
+        - public_ip_name is defined
+        - dns_label is defined
+    
+    - name: "Create NSG {{ network_security_group_name }}"
+      shell: "az network nsg create -g {{ resource_group_name }} -n {{ network_security_group_name }}"
+      when: network_security_group_name is defined
+    
+    - name: "Add NSG SSH Rule"
+      shell: "az network nsg rule create -g {{ resource_group_name }} --nsg-name {{ network_security_group_name }} -n AllowSSH --priority 101 \
+        --source-address-prefixes '*' --direction Inbound \
+        --destination-port-ranges 22 --access Allow \
+        --protocol Tcp"
+      when: network_security_group_name is defined
+    
+    - name: "Create a network interface {{ network_interface_name }}"
+      shell: "az network nic create -g {{ resource_group_name }} --vnet-name {{ virtual_network_name }} --subnet {{ subnet_name }} \
+      -n {{ network_interface_name }} --network-security-group {{ network_security_group_name }} \
+      --public-ip-address {{ public_ip_name }}"
+      when: network_interface_name is defined
+    
+    - name: "Create a storage account {{ storage_account_name }}"
+      shell: "az storage account create -n {{ storage_account_name }} -g {{ resource_group_name }} \
+      --sku Standard_LRS"
+      when: storage_account_name is defined         
+    
+    - name: "Create storage container {{ storage_container_name }}"
+      shell: "az storage container create -n {{ storage_container_name }} --account-name {{ storage_account_name }} --public-access blob"
+      when: storage_container_name is defined

@@ -1,0 +1,95 @@
+---
+    - name: "Create {{ resource_group_name }} Resource Group"
+      azure_rm_resourcegroup:
+        auth_source: cli
+        name: "{{ resource_group_name }}"
+        location: "{{ location }}"
+    
+    - name: "Create {{ virtual_network_name }} Virtual Network"
+      azure_rm_virtualnetwork:
+        auth_source: cli
+        name: "{{ virtual_network_name }}"
+        resource_group: "{{ resource_group_name }}"
+        address_prefixes_cidr:
+          - "{{ virtual_network_cidr }}"    
+    
+    - name: "create {{ subnet_name }} Subnet in {{ virtual_network_name }} for VMs"
+      azure_rm_subnet:
+        name: "{{ subnet_name }}"
+        auth_source: cli
+        virtual_network_name: "{{ virtual_network_name }}"
+        resource_group: "{{ resource_group_name }}"
+        address_prefix_cidr: "{{ subnet_cidr }}"
+    
+    
+    - name: "Create a public ip address {{ public_ip_name }}"
+      azure_rm_publicipaddress:
+        auth_source: cli
+        resource_group: "{{ resource_group_name }}"
+        name: "{{ public_ip_name }}"
+        allocation_method: static
+    
+    
+    - name: "Create NSG {{ network_security_group_name }}"
+      azure_rm_securitygroup:
+          auth_source: cli
+          resource_group: "{{ resource_group_name }}"
+          name: "{{ network_security_group_name }}"
+          purge_rules: yes
+          rules:
+              - name: DenySSH
+                protocol: Tcp
+                destination_port_range: 22
+                access: Deny
+                priority: 100
+                direction: Inbound
+              - name: 'AllowSSH'
+                protocol: Tcp
+                source_address_prefix:
+                  - '174.109.158.0/24'
+                  - '174.109.159.0/24'
+                destination_port_range: 22
+                access: Allow
+                priority: 101
+                direction: Inbound
+              - name: 'AllowMultiplePorts'
+                protocol: Tcp
+                source_address_prefix:
+                  - '174.109.158.0/24'
+                  - '174.109.159.0/24'
+                destination_port_range:
+                  - 80
+                  - 443
+                access: Allow
+                priority: 102
+    
+    - name: "Create a network interface {{ network_interface_name }}"
+      azure_rm_networkinterface:
+        auth_source: cli
+        name: "{{ network_interface_name }}"
+        resource_group: "{{ resource_group_name }}"
+        virtual_network: "{{ virtual_network_name }}"
+        subnet_name: "{{ subnet_name }}"
+        security_group: "{{ network_security_group_name }}"
+        ip_configurations:
+          - name: ipconfig1
+            public_ip_address_name: "{{ public_ip_name }}"
+            primary: True
+    
+    - name: "Create a storage account {{ storage_account_name }}"
+      azure_rm_storageaccount:
+        auth_source: cli
+        resource_group: "{{ resource_group_name }}"
+        name: "{{ storage_account_name }}"
+        type: Standard_LRS
+    
+    - name: "Create storage container {{ container_name }} and upload a file"
+      azure_rm_storageblob:
+        auth_source: cli
+        resource_group: "{{ resource_group_name }}"
+        storage_account_name: "{{ storage_account_name }}"
+        container: "{{ container_name }}"
+        blob: README.md
+        src: ./README.md
+        public_access: blob
+        content_type: 'application/image'

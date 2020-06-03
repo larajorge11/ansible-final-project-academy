@@ -2,30 +2,56 @@
   gather_facts: false
   
   vars:
-    vm_name: __vmName__
-    vm_pwd: __vmPass__
-    vm_user: __vmUser__
-    # vm_size: __vmSize__
-    az_user: __azUser__
     az_pwd: __azPass__
-    location: __location__
-    resource_group_name: __resourceGroupName__
-
-  tasks:
-    - name: debug vmname
-      debug:
-        msg: "new vm is {{ vm_name }}"
+    az_user: __azUser__
     
-    - name: login to azure
+  tasks:
+    - name: Login to Azure
       shell: "az login -u {{ az_user }} -p {{ az_pwd }}"
 
-    - name: "Create resource group"
-      shell: "az group create --location {{ location }} --name {{ resource_group_name }}"
+    - name: deploy infra for web server vm
+      include_role:
+        name: vm-complete-infra
+      vars:
+        vm_name: __vmName__
+        vm_pwd: __vmPass__
+        vm_user: __vmUser__
+        vm_size: __vmSize__
+        location: __location__
+        resource_group_name: __resourceGroupName__
+        network_security_group_name: __networkSecurityGroup__
+        network_interface_name: __networkInterfaceName__
+        virtual_network_name: __virtualNetworkName__
+        virtual_network_cidr: __virtualNetworkCidr__
+        subnet_name: __subnetName__
+        subnet_cidr: __subnetCidr__
+        public_ip_name: __publicIpAddress__
+        dns_label: __dnsLabel__
+        storage_account_name: __storageAccountName__
+        storage_container_name: __containerName__
+     #   sku: __sku__
+     #   image_name: __vmBackup__
+     #   load_balancer_name: __loadBalancerName__
+     #   scale_set_name: __scaleSetName__
+     #   managed_disk_type: "Standard_LRS"
 
-    - name: "Create VM {{ vm_name }} with defaults"
-      shell: "az vm create \
-        --resource-group {{ resource_group_name }} \
-        --name {{ vm_name }} \
-        --image UbuntuLTS \
-        --admin-username {{ vm_user }} \
-        --admin-password {{ vm_pwd }}"
+    - name: deploy infra for db vm
+      include_role:
+        name: vm-complete-infra
+      vars:
+        vm_name: "__vmName__-db"
+        vm_pwd: __vmPass__
+        vm_user: __vmUser__
+        vm_size: __vmSize__
+        location: __location__
+        resource_group_name: __resourceGroupName__
+        network_security_group_name: __networkSecurityGroup__
+        network_interface_name: "__networkInterfaceName__-db"
+        virtual_network_name: __virtualNetworkName__
+        virtual_network_cidr: __virtualNetworkCidr__
+        subnet_name: __subnetName__
+        subnet_cidr: __subnetCidr__
+        public_ip_name: "__publicIpAddress__-db"
+        dns_label: "__dnsLabel__-db"
+        storage_account_name: __storageAccountName__
+        storage_container_name: __containerName__
