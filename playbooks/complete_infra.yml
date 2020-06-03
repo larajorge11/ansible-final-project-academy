@@ -8,10 +8,8 @@
   tasks:
     - name: Login to Azure
       shell: "az login -u {{ az_user }} -p {{ az_pwd }}"
-      ignore_errors: yes
 
     - name: deploy infra for web server vm
-      ignore_errors: yes
       include_role:
         name: vm-complete-infra
       vars:
@@ -38,7 +36,6 @@
         managed_disk_type: "Standard_LRS"
 
     - name: deploy infra for db vm
-      ignore_errors: yes
       include_role:
         name: vm-complete-infra
       vars:
