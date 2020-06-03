@@ -10,4 +10,4 @@
     #     sku: Aligned
 
 - name: "Create VM {{ vm_name }} with predefined Infra"
-  shell: "az vm create -g {{ resource_group_name }} -n {{ vm_name }} --image UbuntuLTS --admin-username {{ vm_user }} --admin-password {{ vm_pwd }} --nic {{ network_interface_name }} --storage-account {{ storage_account_name }} --storage-container-name {{ storage_container_name }} --size {{ vm_size }}"
+  shell: "az vm create -g {{ resource_group_name }} -n {{ vm_name }} --image UbuntuLTS --admin-username {{ vm_user }} --admin-password {{ vm_pwd }} --nic {{ network_interface_name }} --storage-account {{ storage_account_name }} --storage-container-name {{ storage_container_name }} --size {{ vm_size }} --use-unmanaged-disk"
