@@ -19,4 +19,17 @@ stages:
           steps:
             - task: replacetokens@3
               inputs:
-                
+                targetFiles: '**/complete_infra.yml'
+                encoding: 'auto'
+                writeBOM: true
+                actionOnMissing: 'warn'
+                keepToken: false
+                tokenPrefix: '__'
+                tokenSuffix: '__'
+            - task: Ansible@0
+              inputs:
+                ansibleInterface: 'agentMachine'
+                playbookPathOnAgentMachine: '$(System.DefaultWorkingDirectory)/playbooks/complete_infra.yml'
+                inventoriesAgentMachine: 'file'
+                inventoryFileOnAgentMachine: '$(System.DefaultWorkingDirectory)/playbooks/inventory.ini'
+                args: '-vv'
