@@ -2,8 +2,8 @@
     gather_facts: false
 
     vars:
-        az_pwd: __azPass__
-        az_user: __azUser__
+        az_pwd: "JORlaresp1970!"
+        az_user: "jorge.lara@globant.com"
 
     tasks:
         -   name: Login to Azure
