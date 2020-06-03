@@ -33,6 +33,7 @@ stages:
                 inventoriesAgentMachine: 'file'
                 inventoryFileOnAgentMachine: '$(System.DefaultWorkingDirectory)/playbooks/inventory.ini'
                 args: '-vv'
+                failOnStdErr: false
     - stage: Copy
       condition: succeededOrFailed()
       displayName: 'Copy code to blob'
@@ -43,3 +44,4 @@ stages:
             vmImage: $(vmImageNameWindows)
           steps:
             
+                
