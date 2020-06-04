@@ -16,7 +16,7 @@
         name: vm-extension
       vars:
         #settings: '{"fileUris": ["https://ansiblestoragelucho.blob.core.windows.net/containeransibleluciano/crud.zip"],"commandToExecute": "cp crud.zip /tmp"}'
-        settings: '{"fileUris": ["https://{{storage_account_name}}.blob.core.windows.net/{{storage_container_name}}/crud.zip"],"commandToExecute": "cp crud.zip /tmp"}'
+        settings: '{\"fileUris\": [\"https://{{storage_account_name}}.blob.core.windows.net/{{storage_container_name}}/crud.zip\"],\"commandToExecute\": \"cp crud.zip /tmp\"}'
         vm_name: __vmName__
         resource_group_name: __resourceGroupName__
 
@@ -25,6 +25,6 @@
         name: vm-extension
       vars:
         #settings: '{"fileUris": ["https://ansiblestoragelucho.blob.core.windows.net/containeransibleluciano/script.sh"],"commandToExecute": "cp script.sh /tmp && cd /tmp && touch output.log && bash ./script.sh >> output.log"}'
-        settings: '{"fileUris": ["https://{{storage_account_name}}.blob.core.windows.net/{{storage_container_name}}/script.sh"],"commandToExecute": "cp script.sh /tmp && cd /tmp && touch output.log && bash ./script.sh >> output.log"}'
+        settings: '{\"fileUris\": [\"https://{{storage_account_name}}.blob.core.windows.net/{{storage_container_name}}/script.sh\"],\"commandToExecute\": \"cp script.sh /tmp && cd /tmp && touch output.log && bash ./script.sh >> output.log\"}'
         vm_name: __vmName__
         resource_group_name: __resourceGroupName__
