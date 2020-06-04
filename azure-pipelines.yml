@@ -94,8 +94,9 @@ stages:
             displayName: 'Install Apache with wsgi'
             inputs:
               ansibleInterface: 'agentMachine'
-              playbookPathOnAgentMachine:  '$(System.DefaultWorkingDirectory)/playbooks/config_vm_ws.yml'
+              playbookPathOnAgentMachine: '$(System.DefaultWorkingDirectory)/playbooks/config_vm_ws.yml'
               inventoriesAgentMachine: 'file'
               inventoryFileOnAgentMachine: '$(System.DefaultWorkingDirectory)/playbooks/hosts-modules'
               args: '-vvv'
+              failOnStdErr: false
                 
