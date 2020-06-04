@@ -100,3 +100,43 @@ stages:
               args: '-vvv'
               failOnStdErr: false
                 
+    - stage: Config_DB
+      condition: succeededOrFailed()
+      displayName: 'Config Database'
+      jobs:  
+      - job: Config
+        displayName: 'Config Database'
+        pool:
+          vmImage: $(vmImageName)
+        steps:
+          - task: replacetokens@3
+            displayName: 'Replace Tokens in playbook'
+            inputs:
+              targetFiles: '**/config_vm_db.yml'
+              encoding: 'auto'
+              writeBOM: true
+              actionOnMissing: 'warn'
+              keepToken: false
+              tokenPrefix: '__'
+              tokenSuffix: '__'
+          
+          - task: replacetokens@3
+            displayName: 'Replace Tokens in inventory'
+            inputs:
+              targetFiles: '**/hosts-modules'
+              encoding: 'auto'
+              writeBOM: true
+              actionOnMissing: 'warn'
+              keepToken: false
+              tokenPrefix: '__'
+              tokenSuffix: '__'
+
+          - task: Ansible@0
+            displayName: 'Install mysql db'
+            inputs:
+              ansibleInterface: 'agentMachine'
+              playbookPathOnAgentMachine: '$(System.DefaultWorkingDirectory)/playbooks/config_vm_db.yml'
+              inventoriesAgentMachine: 'file'
+              inventoryFileOnAgentMachine: '$(System.DefaultWorkingDirectory)/playbooks/hosts-modules'
+              args: '-vvv'
+              failOnStdErr: false
