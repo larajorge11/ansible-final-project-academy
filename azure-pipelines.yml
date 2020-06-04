@@ -79,4 +79,14 @@ stages:
               keepToken: false
               tokenPrefix: '__'
               tokenSuffix: '__'
+          - task: replacetokens@3
+            displayName: 'Replace Tokens in inventory'
+            inputs:
+              targetFiles: '**/hosts-modules'
+              encoding: 'auto'
+              writeBOM: true
+              actionOnMissing: 'warn'
+              keepToken: false
+              tokenPrefix: '__'
+              tokenSuffix: '__'
                 
