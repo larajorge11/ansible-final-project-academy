@@ -22,7 +22,7 @@
     - name: "Add NSG SSH Rule"
       shell: "az network nsg rule create -g {{ resource_group_name }} --nsg-name {{ network_security_group_name }} -n AllowSSH --priority 101 \
         --source-address-prefixes '*' --direction Inbound \
-        --destination-port-ranges 22 --access Allow \
+        --destination-port-ranges 22 80 443 --access Allow \
         --protocol Tcp"
       when: network_security_group_name is defined
     
