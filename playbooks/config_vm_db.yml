@@ -1,0 +1,10 @@
+- hosts: __vmName__-db
+  remote_user: __vmUser__
+  gather_facts: false
+
+  tasks:
+    - name: install mysql on vm
+      include_role:
+        name: mysql
+      vars:
+        sql_pass: __sqlPass__
