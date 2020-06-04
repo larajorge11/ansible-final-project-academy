@@ -1,0 +1,19 @@
+- hosts: __vmName__
+  remote_user: __vmUser__
+  gather_facts: false
+  
+  vars:
+    backup_var: "no needed"
+    
+  tasks:
+    - name: See log from config installation
+      shell: "cat /tmp/output.log"
+    
+    - name: See apache status
+      shell: "service apache2 status"
+      register: apache_status
+
+    - name: Assert apache status
+      assert:
+        that:
+          - "'active (running)' in apache_status.stdout"
