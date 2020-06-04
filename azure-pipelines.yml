@@ -161,20 +161,6 @@ stages:
               tokenPrefix: '__'
               tokenSuffix: '__'
 
-          - task: replacetokens@3
-            displayName: 'Replace Tokens in inventory2'
-            inputs:
-              targetFiles: '**/config_vm_extension.yml'
-              encoding: 'auto'
-              writeBOM: true
-              actionOnMissing: 'warn'
-              keepToken: false
-              tokenPrefix: '&&'
-              tokenSuffix: 
-              useLegacyPattern: false
-              emptyValue: '"'
-              enableTelemetry: true
-
           - task: Ansible@0
             inputs:
               ansibleInterface: 'agentMachine'
