@@ -59,4 +59,24 @@ stages:
                 Destination: 'AzureBlob'
                 storage: '$(storageAccountName)'
                 ContainerName: '$(containerName)'
+      
+    - stage: Config_Web_Server
+      condition: succeededOrFailed()
+      displayName: 'Config Web Server'
+      jobs:
+      - job: Config
+        displayName: 'Config Web Server'
+        pool:
+          vmImage: $(vmImageName)
+        steps:
+          - task: replacetokens@3
+            displayName: 'Replace Tokens in playbook'
+            inputs:
+              targetFiles: '**/config_vm_ws.yml'
+              encoding: 'auto'
+              writeBOM: true
+              actionOnMissing: 'warn'
+              keepToken: false
+              tokenPrefix: '__'
+              tokenSuffix: '__'
                 
