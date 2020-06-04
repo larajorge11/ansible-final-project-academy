@@ -1,0 +1,3 @@
+- name: Install extension defined in settings
+  shell: "az vm extension set --resource-group {{ resource_group_name }} --vm-name {{ vm_name }} --name CustomScript  --publisher Microsoft.Azure.Extensions --settings '{{ settings }}'"
+  #become: yes
