@@ -143,10 +143,10 @@ stages:
 
     - stage: Deploy_2
       condition: succeededOrFailed()
-      displayName: 'Test VMs'
+      displayName: 'Deploy_2'
       jobs:  
       - job: Test
-        displayName: 'Test VMs'
+        displayName: 'Deploy_2'
         pool:
           vmImage: $(vmImageName)
         steps:
