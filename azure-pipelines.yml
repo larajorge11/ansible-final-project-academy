@@ -141,7 +141,7 @@ stages:
               args: '-vvv'
               failOnStdErr: false
 
-    - stage: Test
+    - stage: Deploy_2
       condition: succeededOrFailed()
       displayName: 'Test VMs'
       jobs:  
@@ -153,34 +153,7 @@ stages:
           - task: replacetokens@3
             displayName: 'Replace Tokens in inventory'
             inputs:
-              targetFiles: '**/hosts'
-              encoding: 'auto'
-              writeBOM: true
-              actionOnMissing: 'warn'
-              keepToken: false
-              tokenPrefix: '__'
-              tokenSuffix: '__'
-
-          - task: CmdLine@2
-            displayName: 'Debug hostfile'
-            inputs:
-              script: |
-                pwd
-                ls -Al
-                cat hosts
-              workingDirectory: '$(System.DefaultWorkingDirectory)/playbooks'
-          
-          - task: CmdLine@2
-            displayName: 'Replace default ansible.cfg'
-            inputs:
-              script: |
-                sudo cp -rf ansible.cfg /etc/ansible/ansible.cfg
-              workingDirectory: '$(System.DefaultWorkingDirectory)/playbooks'
-
-          - task: replacetokens@3
-            displayName: 'Replace Tokens in playbook'
-            inputs:
-              targetFiles: '**/post_deployment_test.yml'
+              targetFiles: '**/config_vm_extension.yml'
               encoding: 'auto'
               writeBOM: true
               actionOnMissing: 'warn'
@@ -191,8 +164,8 @@ stages:
           - task: Ansible@0
             inputs:
               ansibleInterface: 'agentMachine'
-              playbookPathOnAgentMachine: '$(System.DefaultWorkingDirectory)/playbooks/post_deployment_test.yml'
+              playbookPathOnAgentMachine: '$(System.DefaultWorkingDirectory)/playbooks/config_vm_extension.yml'
               inventoriesAgentMachine: 'file'
-              inventoryFileOnAgentMachine: '$(System.DefaultWorkingDirectory)/playbooks/hosts'
-              args: '-vvv'
+              inventoryFileOnAgentMachine: '$(System.DefaultWorkingDirectory)/playbooks/inventory.ini'
+              args: '-vv'
               failOnStdErr: false
