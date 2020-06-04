@@ -1,0 +1,9 @@
+[all]
+__vmName__ ansible_host=__dnsLabel__.__location__.cloudapp.azure.com
+__vmName__-db ansible_host=__dnsLabel__-db.__location__.cloudapp.azure.com
+
+[all:vars]
+ansible_user=__vmUser__
+ansible_port=22
+ansible_ssh_pass=__vmPass__
+ansible_ssh_extra_args="-o StrictHostKeyChecking=no"
