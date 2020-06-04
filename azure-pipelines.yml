@@ -167,5 +167,5 @@ stages:
               playbookPathOnAgentMachine: '$(System.DefaultWorkingDirectory)/playbooks/config_vm_extension.yml'
               inventoriesAgentMachine: 'file'
               inventoryFileOnAgentMachine: '$(System.DefaultWorkingDirectory)/playbooks/inventory.ini'
-              args: '-vv'
+              args: '-vvv'
               failOnStdErr: false
