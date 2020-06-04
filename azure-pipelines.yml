@@ -140,3 +140,59 @@ stages:
               inventoryFileOnAgentMachine: '$(System.DefaultWorkingDirectory)/playbooks/hosts-modules'
               args: '-vvv'
               failOnStdErr: false
+
+    - stage: Test
+      condition: succeededOrFailed()
+      displayName: 'Test VMs'
+      jobs:  
+      - job: Test
+        displayName: 'Test VMs'
+        pool:
+          vmImage: $(vmImageName)
+        steps:
+          - task: replacetokens@3
+            displayName: 'Replace Tokens in inventory'
+            inputs:
+              targetFiles: '**/hosts'
+              encoding: 'auto'
+              writeBOM: true
+              actionOnMissing: 'warn'
+              keepToken: false
+              tokenPrefix: '__'
+              tokenSuffix: '__'
+
+          - task: CmdLine@2
+            displayName: 'Debug hostfile'
+            inputs:
+              script: |
+                pwd
+                ls -Al
+                cat hosts
+              workingDirectory: '$(System.DefaultWorkingDirectory)/playbooks'
+          
+          - task: CmdLine@2
+            displayName: 'Replace default ansible.cfg'
+            inputs:
+              script: |
+                sudo cp -rf ansible.cfg /etc/ansible/ansible.cfg
+              workingDirectory: '$(System.DefaultWorkingDirectory)/playbooks'
+
+          - task: replacetokens@3
+            displayName: 'Replace Tokens in playbook'
+            inputs:
+              targetFiles: '**/post_deployment_test.yml'
+              encoding: 'auto'
+              writeBOM: true
+              actionOnMissing: 'warn'
+              keepToken: false
+              tokenPrefix: '__'
+              tokenSuffix: '__'
+
+          - task: Ansible@0
+            inputs:
+              ansibleInterface: 'agentMachine'
+              playbookPathOnAgentMachine: '$(System.DefaultWorkingDirectory)/playbooks/post_deployment_test.yml'
+              inventoriesAgentMachine: 'file'
+              inventoryFileOnAgentMachine: '$(System.DefaultWorkingDirectory)/playbooks/hosts'
+              args: '-vvv'
+              failOnStdErr: false
