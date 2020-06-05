@@ -23,11 +23,11 @@
     - name: copy crud to db machine
       include_role:
         name: vm-extension
-        vars:
-            settings: '{"fileUris": ["https://mystorageaccountdavor.blob.core.windows.net/mycontainernamedavor/crud.zip"],"commandToExecute": "cp crud.zip /tmp"}'
-            #settings: '{"fileUris": ["https://{{storage_account_name}}.blob.core.windows.net/{{storage_container_name}}/crud.zip"],"commandToExecute": "cp crud.zip /tmp"}'
-            vm_name: __vmName__-db
-            resource_group_name: __resourceGroupName__
+      vars:
+        settings: '{"fileUris": ["https://mystorageaccountdavor.blob.core.windows.net/mycontainernamedavor/crud.zip"],"commandToExecute": "cp crud.zip /tmp"}'
+        #settings: '{"fileUris": ["https://{{storage_account_name}}.blob.core.windows.net/{{storage_container_name}}/crud.zip"],"commandToExecute": "cp crud.zip /tmp"}'
+        vm_name: __vmName__-db
+        resource_group_name: __resourceGroupName__
 
     - name: copy sql file - db machine
       include_role:
