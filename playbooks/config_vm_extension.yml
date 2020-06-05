@@ -20,11 +20,20 @@
         vm_name: __vmName__
         resource_group_name: __resourceGroupName__
 
+    - name: copy sql file
+      include_role:
+        name: vm-extension
+      vars:
+        settings: '{"fileUris": ["https://mystorageaccountdavor.blob.core.windows.net/mycontainernamedavor/cp mysqld.cnf"],"commandToExecute": "cp mysqld.cnf /tmp"}'
+        #settings: '{"fileUris": ["https://{{storage_account_name}}.blob.core.windows.net/{{storage_container_name}}/crud.zip"],"commandToExecute": "cp crud.zip /tmp"}'
+        vm_name: __vmName__
+        resource_group_name: __resourceGroupName__
+
     - name: install crud
       include_role:
         name: vm-extension
       vars:
-        settings: '{"fileUris": ["https://mystorageaccountdavor.blob.core.windows.net/mycontainernamedavor/script.sh"],"commandToExecute": "cp script.sh /tmp && cd /tmp && touch output.log && bash ./script.sh >> output.log"}'
+        settings: '{"fileUris": ["https://mystorageaccountdavor.blob.core.windows.net/mycontainernamedavor/script.sh"],"commandToExecute": "cp script.sh /tmp && cd /tmp && sudo mv mysqld.cnf /etc/mysql/mysql.conf.d/ && touch output.log && bash ./script.sh >> output.log"}'
         #settings: '{"fileUris": ["https://{{storage_account_name}}.blob.core.windows.net/{{storage_container_name}}/script.sh"],"commandToExecute": "cp script.sh /tmp && cp mysqld.cnf /tmp && cd /tmp && sudo mv mysqld.cnf /etc/mysql/mysql.conf.d/ && touch output.log && bash ./script.sh >> output.log"}'
         vm_name: __vmName__
         resource_group_name: __resourceGroupName__
