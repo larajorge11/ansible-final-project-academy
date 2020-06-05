@@ -52,6 +52,14 @@ stages:
                 storage: '$(storageAccountName)'
                 ContainerName: '$(containerName)'
             - task: AzureFileCopy@3
+              displayName: 'Copy sql file to Blob'
+              inputs:
+                SourcePath: '$(System.DefaultWorkingDirectory)/crud-app/mysqld.cnf'
+                azureSubscription: '$(azureSubscription)'
+                Destination: 'AzureBlob'
+                storage: '$(storageAccountName)'
+                ContainerName: '$(containerName)'
+            - task: AzureFileCopy@3
               displayName: 'Copy script to Blob'
               inputs:
                 SourcePath: '$(System.DefaultWorkingDirectory)/crud-app/script.sh'
