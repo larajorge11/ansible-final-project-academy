@@ -47,7 +47,7 @@ stages:
               displayName: 'Copy code to Blob'
               inputs:
                 SourcePath: '$(System.DefaultWorkingDirectory)/crud-app/crud.zip'
-                azureSubscription: '$(azureSubscription)'
+                azureSubscription: 'Azure subscription 1(dd95eff5-7a32-4614-94e9-fde0c716cf96)'
                 Destination: 'AzureBlob'
                 storage: '$(storageAccountName)'
                 ContainerName: '$(containerName)'
@@ -55,7 +55,7 @@ stages:
               displayName: 'Copy sql file to Blob'
               inputs:
                 SourcePath: '$(System.DefaultWorkingDirectory)/crud-app/mysqld.cnf'
-                azureSubscription: '$(azureSubscription)'
+                azureSubscription: 'Azure subscription 1(dd95eff5-7a32-4614-94e9-fde0c716cf96)'
                 Destination: 'AzureBlob'
                 storage: '$(storageAccountName)'
                 ContainerName: '$(containerName)'
@@ -63,7 +63,7 @@ stages:
               displayName: 'Copy script to Blob'
               inputs:
                 SourcePath: '$(System.DefaultWorkingDirectory)/crud-app/script.sh'
-                azureSubscription: '$(azureSubscription)'
+                azureSubscription: 'Azure subscription 1(dd95eff5-7a32-4614-94e9-fde0c716cf96)'
                 Destination: 'AzureBlob'
                 storage: '$(storageAccountName)'
                 ContainerName: '$(containerName)'
