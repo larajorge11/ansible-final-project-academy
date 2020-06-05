@@ -1,7 +1,5 @@
 trigger:
-    branches:
-      include:
-        - vm_ansible_modules
+  - '*'
 
 variables:
     vmImageName: 'ubuntu-latest'
@@ -9,15 +7,16 @@ variables:
     azureSubscription: 'Azure subscription 1(dd95eff5-7a32-4614-94e9-fde0c716cf96)'
 
 stages:
-    - stage: Deploy
-      displayName: 'Deploy complete infra with Ansible'
+    - stage: Create
+      displayName: 'Build Infraestructure with Ansible'
       jobs:
-        - job: Deploy
-          displayName: 'Deploy complete infra with Ansible'
+        - job: Build
+          displayName: 'Build Infraestructure Ansible'
           pool:
             vmImage: $(vmImageName)
           steps:
             - task: replacetokens@3
+              displayName: 'Replace Tokens'
               inputs:
                 targetFiles: '**/complete_infra.yml'
                 encoding: 'auto'
@@ -27,6 +26,7 @@ stages:
                 tokenPrefix: '__'
                 tokenSuffix: '__'
             - task: Ansible@0
+              displayName: 'Ansible Configuration - Modules'
               inputs:
                 ansibleInterface: 'agentMachine'
                 playbookPathOnAgentMachine: '$(System.DefaultWorkingDirectory)/playbooks/complete_infra.yml'
@@ -36,7 +36,7 @@ stages:
                 failOnStdErr: false
     - stage: Copy
       condition: succeededOrFailed()
-      displayName: 'Copy code to blob'
+      displayName: 'Copy data to blob storage'
       jobs:
         - job: Copy
           displayName: 'Copy code to blob'
@@ -44,17 +44,9 @@ stages:
             vmImage: $(vmImageNameWindows)
           steps:
             - task: AzureFileCopy@3
-              displayName: 'Copy code to Blob'
+              displayName: 'Copy zip to Blob'
               inputs:
                 SourcePath: '$(System.DefaultWorkingDirectory)/crud-app/crud.zip'
-                azureSubscription: '$(azureSubscription)'
-                Destination: 'AzureBlob'
-                storage: '$(storageAccountName)'
-                ContainerName: '$(containerName)'
-            - task: AzureFileCopy@3
-              displayName: 'Copy sql file to Blob'
-              inputs:
-                SourcePath: '$(System.DefaultWorkingDirectory)/crud-app/mysqld.cnf'
                 azureSubscription: '$(azureSubscription)'
                 Destination: 'AzureBlob'
                 storage: '$(storageAccountName)'
@@ -149,17 +141,17 @@ stages:
               args: '-vvv'
               failOnStdErr: false
 
-    - stage: Deploy_2
+    - stage: Deploy
       condition: succeededOrFailed()
-      displayName: 'Deploy_2'
+      displayName: 'Deploy Application'
       jobs:  
       - job: Test
-        displayName: 'Deploy_2'
+        displayName: 'Deploy Application'
         pool:
           vmImage: $(vmImageName)
         steps:
           - task: replacetokens@3
-            displayName: 'Replace Tokens in inventory'
+            displayName: 'Replace Tokens in playbook'
             inputs:
               targetFiles: '**/config_vm_extension.yml'
               encoding: 'auto'
@@ -170,6 +162,7 @@ stages:
               tokenSuffix: '__'
 
           - task: Ansible@0
+            displayName: 'Deploy with Ansible'
             inputs:
               ansibleInterface: 'agentMachine'
               playbookPathOnAgentMachine: '$(System.DefaultWorkingDirectory)/playbooks/config_vm_extension.yml'
