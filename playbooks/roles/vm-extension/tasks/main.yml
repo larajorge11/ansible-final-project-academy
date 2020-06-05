@@ -1,8 +1,6 @@
----
     -   name: "Create VM Extension"
         azure_rm_virtualmachineextension:
             name: myvmextension
-            location: "{{location}}"
             resource_group: "{{resource_group_name}}"
             virtual_machine_name: "{{ vm_name }}"
             publisher: Microsoft.Azure.Extensions
