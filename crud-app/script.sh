@@ -19,6 +19,10 @@ sudo mysql crud < sql/users.sql
 sudo apt install php7.0 libapache2-mod-php7.0 php7.0-mysql php-common php7.0-cli php7.0-common php7.0-json php7.0-opcache php7.0-readline
 sudo apt autoremove -y
 sudo a2enmod php7.0
+cd /etc/mysql/mysql.conf.d/
+sudo chmod 0644 mysqld.cnf
+sudo sed -i 's/127.0.0.1/0.0.0.0/g' ./mysqld.cnf
+sudo systemctl restart mysql.service
 sudo touch info.php
 echo "<?php phpinfo(); ?>" > /var/www/html/info.php
 sudo cp info.php /var/www/html/info.php
