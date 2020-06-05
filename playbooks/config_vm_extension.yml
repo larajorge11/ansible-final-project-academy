@@ -33,7 +33,7 @@
       include_role:
         name: vm-extension
       vars:
-        settings: '{"fileUris": ["https://mystorageaccountdavor.blob.core.windows.net/mycontainernamedavor/cp mysqld.cnf"],"commandToExecute": "cp mysqld.cnf /tmp"}'
+        settings: '{"fileUris": ["https://mystorageaccountdavor.blob.core.windows.net/mycontainernamedavor/mysqld.cnf"],"commandToExecute": "cp mysqld.cnf /tmp"}'
         #settings: '{"fileUris": ["https://{{storage_account_name}}.blob.core.windows.net/{{storage_container_name}}/crud.zip"],"commandToExecute": "cp crud.zip /tmp"}'
         vm_name: __vmName__-db
         resource_group_name: __resourceGroupName__
